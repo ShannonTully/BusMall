@@ -24,19 +24,25 @@ var productRank = {
 
   getRandomIndex: function(max) {
     // TODO: Hmm... what's going to happen here?
-    return Math.round(Math.random() * (max - 0)) + 0;
+    return Math.floor(Math.random() * (max - 0)) + 0;
   },
 
   displayImages: function() {
     // TODO: Hmm... what's going to happen here?
     var imgs = document.getElementsByClassName('imgs');
+    var rand = [-1, -1, -1];
+
+    while(rand[0] === rand[1] || rand[0] === rand[2] || rand[1] === rand[2]) {
+      rand = [productRank.getRandomIndex(allProducts.length), productRank.getRandomIndex(allProducts.length), productRank.getRandomIndex(allProducts.length)];
+    }
 
     for(var i = 0; i < 3; i++) {
-      imgs[i].src = allProducts[productRank.getRandomIndex(allProducts.length)].path;
+      imgs[i].src = allProducts[rand[i]].path;
+      allProducts[rand[i]].timesShown++;
     }
   },
 
-  /*tallyClicks: function(elementId) {
+  tallyClicks: function(elementId) {
     // TODO: Hmm... what's going to happen here?
   },
 
@@ -50,8 +56,12 @@ var productRank = {
 
   onClick: function() {
     // TODO: Hmm... what's going to happen here?
-  },*/
+    
+  },
+
+  imageEls: document.getElementsByClassName('imgs'),
 };
 
-//productRank.imageEls.addEventListener('click', productRank.onClick);
+
+productRank.imageEls.addEventListener('click', productRank.onClick);
 productRank.displayImages();
