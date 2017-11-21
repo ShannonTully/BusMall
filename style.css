@@ -7,3 +7,16 @@ html {
   background-color: black;
   color: grey;
 }
+
+#pics {
+  text-align: center;
+}
+
+header {
+  text-align: center;
+}
+
+footer {
+  padding: 10px;
+  margin: 15px;
+}

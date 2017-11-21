@@ -14,10 +14,11 @@ function Product(imgName, path) {
 }
 
 // TODO: Don't forget to build your objects. How can you do this withough having to write 14 lines of `new Product(., ., .)`?
-
-for(var i = 0; i < productNames.length; i++) {
-  new Product(productNames[i], 'img/' + productNames[i] + '.jpg');
-}
+(function() {
+  for(var i in productNames) {
+    new Product(productNames[i], 'img/' + productNames[i] + '.jpg');
+  }
+})();
 
 var productRank = {
   // TODO: All the properties of the object! What do you think you need? Try to write one piece at a time and make sure it does what you want before writing a little more.
@@ -57,15 +58,32 @@ var productRank = {
 
   displayResults: function() {
     // TODO: Hmm... what's going to happen here?
-    var footerEl = document.getElementsByTagName('footer');
-    var ulEl = document.createElement('ul');
-    footerEl[0].appendChild(ulEl);
+    // var footerEl = document.getElementsByTagName('footer');
+    // var ulEl = document.createElement('ul');
+    // footerEl[0].appendChild(ulEl);
+    //
+    // for(var i = 0; i < allProducts.length; i++) {
+    //   var liEl = document.createElement('li');
+    //   liEl.innerHTML = allProducts[i].imgName + ' has ' + allProducts[i].timesClicked + ' clicks.';
+    //   ulEl.appendChild(liEl);
+    // }
 
-    for(var i = 0; i < allProducts.length; i++) {
-      var liEl = document.createElement('li');
-      liEl.innerHTML = allProducts[i].imgName + ' has ' + allProducts[i].timesClicked + ' clicks.';
-      ulEl.appendChild(liEl);
+    var labels = [];
+    var data = [];
+    var bgColors = [];
+    var bdColors = [];
+
+    for(var i in allProducts) {
+      labels.push(allProducts[i].imgName);
+      data.push(allProducts[i].timesClicked);
+      bgColors.push('rgba(' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ', 1)');
+      bdColors.push('rgba(' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ', 1)');
     }
+
+    var footEl = document.getElementsByTagName('footer');
+    footEl[0].style.backgroundColor = 'white';
+
+    productRank.createChart(labels, data, bgColors, bdColors);
   },
 
   showButton: function() {
@@ -80,6 +98,33 @@ var productRank = {
     formEl[0].appendChild(buttonEl);
   },
 
+  createChart: function(arrLabels, arrData, bgColors, bdColors) {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var options = {
+      type: 'bar',
+      data: {
+        labels: arrLabels,
+        datasets: [{
+          label: '# of Votes',
+          data: arrData,
+          backgroundColor: bgColors,
+          borderColor: bdColors,
+          borderWidth: 4,
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
+        }
+      }
+    };
+    var myChart = new Chart(ctx, options);
+  },
+
   onClick: function(event) {
     // TODO: Hmm... what's going to happen here?
     console.log(event, event.target);
@@ -87,9 +132,9 @@ var productRank = {
       productRank.tallyClicks(threeObjects[0]);
     } else if (event.target.id === '2') {
       productRank.tallyClicks(threeObjects[1]);
-    } else {
+    } else if(event.target.id === '3'){
       productRank.tallyClicks(threeObjects[2]);
-    }
+    } else return;
     threeObjects = productRank.displayImages();
   },
 };
