@@ -2,6 +2,7 @@
 
 var allProducts = [];
 var productNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'sweepers', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass']; // TODO: see the pattern here, and what you need to fill in?
+var totalClicks = 0;
 
 function Product(imgName, path) {
   // TODO: Build your constructor and necessary properties.
@@ -40,10 +41,18 @@ var productRank = {
       imgs[i].src = allProducts[rand[i]].path;
       allProducts[rand[i]].timesShown++;
     }
+
+    return rand;
   },
 
   tallyClicks: function(elementId) {
     // TODO: Hmm... what's going to happen here?
+    allProducts[elementId].timesClicked++;
+
+    totalClicks++;
+    if(totalClicks === 25) {
+      productRank.showButton();
+    }
   },
 
   displayResults: function() {
@@ -52,16 +61,27 @@ var productRank = {
 
   showButton: function() {
     // TODO: Hmm... what's going to happen here?
+    productRank.imagesEL.removeEventListener();
+    var button = document.get
+    productRank.imagesEL.appendChild(button)
   },
 
-  onClick: function() {
+  onClick: function(event) {
     // TODO: Hmm... what's going to happen here?
-    
-  },
+    console.log(event, event.target);
+    if(event.target.id === '1') {
+      productRank.tallyClicks(threeObjects[0]);
+    } else if (event.target.id === '2') {
+      productRank.tallyClicks(threeObjects[1]);
+    } else {
+      productRank.tallyClicks(threeObjects[2]);
+    }
+    threeObjects = productRank.displayImages();
 
-  imageEls: document.getElementsByClassName('imgs'),
+  },
 };
 
+productRank.imagesEL = document.getElementById('pics');
 
-productRank.imageEls.addEventListener('click', productRank.onClick);
-productRank.displayImages();
+productRank.imagesEL.addEventListener('click', productRank.onClick);
+var threeObjects = productRank.displayImages();
