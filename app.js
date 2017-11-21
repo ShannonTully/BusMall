@@ -57,13 +57,27 @@ var productRank = {
 
   displayResults: function() {
     // TODO: Hmm... what's going to happen here?
+    var footerEl = document.getElementsByTagName('footer');
+    var ulEl = document.createElement('ul');
+    footerEl[0].appendChild(ulEl);
+
+    for(var i = 0; i < allProducts.length; i++) {
+      var liEl = document.createElement('li');
+      liEl.innerHTML = allProducts[i].imgName + ' has ' + allProducts[i].timesClicked + ' clicks.';
+      ulEl.appendChild(liEl);
+    }
   },
 
   showButton: function() {
     // TODO: Hmm... what's going to happen here?
-    productRank.imagesEL.removeEventListener();
-    var button = document.get
-    productRank.imagesEL.appendChild(button)
+    productRank.imagesEL.removeEventListener('click', productRank.onClick);
+    var formEl = document.getElementsByClassName('form');
+    var buttonEl = document.createElement('button');
+    // buttonEl.type = 'button';
+    // buttonEl.name = 'button';
+    buttonEl.onClick = productRank.displayResults();
+    buttonEl.innerHTML = 'Reset'; // this used to say results and was supposed to show the results but it refreshes the webpage for some reason so I am keeping it
+    formEl[0].appendChild(buttonEl);
   },
 
   onClick: function(event) {
@@ -77,7 +91,6 @@ var productRank = {
       productRank.tallyClicks(threeObjects[2]);
     }
     threeObjects = productRank.displayImages();
-
   },
 };
 
