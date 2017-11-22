@@ -52,7 +52,36 @@ var productRank = {
 
     totalClicks++;
     if(totalClicks === 25) {
+      productRank.persist();
       productRank.showButton();
+    }
+  },
+
+  persist: function() {
+    var clicks = [];
+    var clicksSum = [];
+
+    for(var i in allProducts) {
+      clicks.push(allProducts[i].timesClicked);
+    }
+
+    var parse = localStorage.getItem('clicks');
+    var localClicks = JSON.parse(parse);
+
+    if(localClicks !== null) {
+      for(var j in clicks) {
+        clicksSum[j] = clicks[j] + localClicks[j];
+      }
+    } else {
+      clicksSum = clicks;
+    }
+
+    localStorage.clear();
+    var clicksString = JSON.stringify(clicksSum);
+    localStorage.setItem('clicks', clicksString);
+
+    for(var k in allProducts) {
+      allProducts[k].timesClicked = clicksSum[k];
     }
   },
 
@@ -73,9 +102,13 @@ var productRank = {
     var bgColors = [];
     var bdColors = [];
 
+    var sorted = allProducts.sort(function(a, b) {
+      return b.timesClicked - a.timesClicked;
+    });
+
     for(var i in allProducts) {
-      labels.push(allProducts[i].imgName);
-      data.push(allProducts[i].timesClicked);
+      labels.push(sorted[i].imgName);
+      data.push(sorted[i].timesClicked);
       bgColors.push('rgba(' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ', 1)');
       bdColors.push('rgba(' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ',' + productRank.getRandomIndex(255) + ', 1)');
     }
